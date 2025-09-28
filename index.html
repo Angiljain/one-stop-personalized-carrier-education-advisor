@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>One-stop Career & Education Advisor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f5f7fa; }
+        .center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        .logo { font-size: 2.5rem; font-weight: bold; color: #2b6cb0; margin-bottom: 0.5em; }
+        .tagline { font-size: 1.2rem; color: #4a5568; margin-bottom: 2em; }
+        .loader { border: 6px solid #e2e8f0; border-top: 6px solid #2b6cb0; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 2em;}
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .btn { background: #2b6cb0; color: #fff; border: none; padding: 0.8em 2em; border-radius: 5px; font-size: 1rem; cursor: pointer; margin: 0.5em 0; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; margin: 1em auto; max-width: 400px; }
+        .input, select { width: 100%; padding: 0.7em; margin: 0.5em 0 1em 0; border: 1px solid #cbd5e1; border-radius: 4px; }
+        .nav { display: flex; justify-content: space-around; background: #2b6cb0; color: #fff; padding: 1em 0; position: fixed; width: 100%; bottom: 0; left: 0; }
+        .nav a { color: #fff; text-decoration: none; font-weight: 500; }
+        .progress-bar { background: #e2e8f0; border-radius: 5px; overflow: hidden; height: 18px; margin-bottom: 1em; }
+        .progress { background: #2b6cb0; height: 100%; }
+        .section-title { font-size: 1.3rem; color: #2b6cb0; margin-bottom: 0.7em; }
+        .small-link { color: #2b6cb0; font-size: 0.95em; cursor: pointer; text-decoration: underline; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Splash / Welcome Screen -->
+    <div id="splash" class="center">
+        <div class="logo">CareerPath</div>
+        <div class="tagline">Find Your Path, Build Your Future</div>
+        <div class="loader"></div>
+    </div>
+
+    <!-- Onboarding / Sign Up Page -->
+    <div id="onboarding" class="center hidden">
+        <div class="card">
+            <div class="section-title">Sign Up / Sign In</div>
+            <button class="btn" onclick="nextPage('profile')">Continue with Google</button>
+            <button class="btn" onclick="nextPage('profile')">Continue with LinkedIn</button>
+            <input class="input" type="email" placeholder="Email">
+            <button class="btn" onclick="nextPage('profile')">Continue with Email</button>
+            <hr>
+            <div class="section-title" style="font-size:1rem;">Quick Questionnaire</div>
+            <select class="input">
+                <option>Education Level</option>
+                <option>School</option>
+                <option>College</option>
+                <option>Graduate</option>
+            </select>
+            <select class="input">
+                <option>Field of Interest</option>
+                <option>Science</option>
+                <option>Arts</option>
+                <option>Commerce</option>
+                <option>Technology</option>
+            </select>
+            <div class="small-link" onclick="nextPage('profile')">Continue as Guest</div>
+        </div>
+    </div>
+
+    <!-- User Profile Setup Page -->
+    <div id="profile" class="center hidden">
+        <div class="card">
+            <div class="section-title">Profile Setup</div>
+            <input class="input" type="file" accept="image/*">
+            <input class="input" type="text" placeholder="Current Education">
+            <input class="input" type="text" placeholder="Marks/Grades">
+            <input class="input" type="text" placeholder="Skills (e.g., coding, design)">
+            <input class="input" type="text" placeholder="Interests (e.g., creative, analytical)">
+            <input class="input" type="text" placeholder="Career Aspirations">
+            <button class="btn" onclick="nextPage('dashboard')">Save & Continue</button>
+        </div>
+    </div>
+
+    <!-- Dashboard (Home Page) -->
+    <div id="dashboard" class="center hidden">
+        <div class="card">
+            <div class="section-title">Hi Nehal, here are today’s recommendations</div>
+            <div>
+                <div class="card" style="background:#ebf8ff;">Career Suggestion: <b>Web Developer</b></div>
+                <div class="card" style="background:#fefcbf;">Skill to Improve: <b>Communication</b></div>
+                <div class="card" style="background:#c6f6d5;">Course Recommendation: <b>HTML & CSS Basics</b></div>
+                <div class="card" style="background:#fbd38d;">Progress Score: <b>45%</b></div>
+            </div>
+        </div>
+        <div class="nav">
+            <a href="#" onclick="nextPage('career')">Careers</a>
+            <a href="#" onclick="nextPage('education')">Education</a>
+            <a href="#" onclick="nextPage('roadmap')">Roadmap</a>
+            <a href="#" onclick="nextPage('mentorship')">Mentorship</a>
+            <a href="#" onclick="nextPage('progress')">Progress</a>
+            <a href="#" onclick="nextPage('community')">Community</a>
+            <a href="#" onclick="nextPage('settings')">Settings</a>
+        </div>
+    </div>
+
+    <!-- Career Recommendation Page -->
+    <div id="career" class="center hidden">
+        <div class="card">
+            <div class="section-title">Top Career Recommendations</div>
+            <div>
+                <b>1. Web Developer</b>
+                <ul>
+                    <li>Job: Build websites & apps</li>
+                    <li>Growth: High demand</li>
+                    <li>Salary: $40k–$120k</li>
+                    <li>Work: Remote/Freelance</li>
+                    <li>Why: Matches your coding & creative skills</li>
+                </ul>
+                <b>2. Data Analyst</b>
+                <ul>
+                    <li>Job: Analyze data for insights</li>
+                    <li>Growth: Growing field</li>
+                    <li>Salary: $45k–$110k</li>
+                    <li>Work: On-site/Remote</li>
+                    <li>Why: Suits your analytical interests</li>
+                </ul>
+            </div>
+            <div>
+                <select class="input">
+                    <option>Filter: Trending Careers</option>
+                    <option>High-Paying Careers</option>
+                    <option>Careers for Arts Students</option>
+                </select>
+            </div>
+            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Education & Skill Development Page -->
+    <div id="education" class="center hidden">
+        <div class="card">
+            <div class="section-title">Skill Development</div>
+            <div>
+                <b>Technical Skills</b>
+                <ul>
+                    <li>HTML & CSS (Coursera) <span class="small-link">Enroll</span></li>
+                    <li>Python Basics (Udemy) <span class="small-link">Enroll</span></li>
+                </ul>
+                <b>Soft Skills</b>
+                <ul>
+                    <li>Communication (LinkedIn Learning) <span class="small-link">Enroll</span></li>
+                    <li>Leadership (NPTEL) <span class="small-link">Enroll</span></li>
+                </ul>
+            </div>
+            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Roadmap / Career Journey Page -->
+    <div id="roadmap" class="center hidden">
+        <div class="card">
+            <div class="section-title">Career Roadmap</div>
+            <ul>
+                <li>Learn HTML/CSS (1 month)</li>
+                <li>Build 3 projects (2 months)</li>
+                <li>Get internship (6 months)</li>
+                <li>Apply for jobs (1 year)</li>
+            </ul>
+            <div class="progress-bar">
+                <div class="progress" style="width: 45%;"></div>
+            </div>
+            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Mentorship & Guidance Page -->
+    <div id="mentorship" class="center hidden">
+        <div class="card">
+            <div class="section-title">Mentorship & Guidance</div>
+            <div>
+                <b>AI Mentor Chatbot:</b> <span class="small-link">Ask a question</span><br>
+                <b>Resume Builder:</b> <span class="small-link">Start</span><br>
+                <b>Interview Prep:</b> <span class="small-link">Practice</span>
+            </div>
+            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Resources & Community Page -->
+    <div id="community" class="center hidden">
+        <div class="card">
+            <div class="section-title">Resources & Community</div>
+            <ul>
+                <li>Career Blogs</li>
+                <li>Industry Updates</li>
+                <li>Success Stories</li>
+                <li>Peer Forums</li>
+                <li>Motivational Content</li>
+            </ul>
+            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Progress & Tracking Page -->
+    <div id="progress" class="center hidden">
+        <div class="card">
+            <div class="section-title">Your Progress</div>
+            <div>Career Readiness Score: <b>45%</b></div>
+            <div class="progress-bar">
+                <div class="progress" style="width: 45%;"></div>
+            </div>
+            <div>Skills Learned: 3/10</div>
+            <div>Courses Completed: 2</div>
+            <div>Badges Earned: <span>Beginner, Communicator</span></div>
+            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Settings & Profile Management Page -->
+    <div id="settings" class="center hidden">
+        <div class="card">
+            <div class="section-title">Settings & Profile</div>
+            <div>
+                <div class="small-link">Edit Profile</div>
+                <div class="small-link">Notification Settings</div>
+                <div class="small-link">Privacy & Data</div>
+                <div class="small-link">Toggle Dark/Light Mode</div>
+            </div>
+            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Help & Support Page -->
+    <div id="help" class="center hidden">
+        <div class="card">
+            <div class="section-title">Help & Support</div>
+            <ul>
+                <li>FAQs</li>
+                <li>Contact Support: <span class="small-link">Chatbot</span>, <span class="small-link">Email</span>, <span class="small-link">Phone</span></li>
+                <li>Feedback Form</li>
+            </ul>
+            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <script>
+        // Page navigation logic
+        function nextPage(page) {
+            const pages = ['splash','onboarding','profile','dashboard','career','education','roadmap','mentorship','community','progress','settings','help'];
+            pages.forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(page).classList.remove('hidden');
+        }
+        // Splash screen timeout
+        window.onload = function() {
+            setTimeout(() => nextPage('onboarding'), 1800);
+        }
+    </script>
+</body>
+</html>
