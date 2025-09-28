@@ -787,7 +787,435 @@
             observer.observe(el);
         });
 
-        // CTA button interactions
+        // Functional Demo Data
+        const collegeData = [
+            { name: "Government College of Arts", location: "Bangalore", courses: ["BA English", "BA History", "BA Psychology"], cutoff: 85 },
+            { name: "State Science College", location: "Mysore", courses: ["BSc Physics", "BSc Chemistry", "BSc Mathematics"], cutoff: 78 },
+            { name: "Commerce Government College", location: "Mangalore", courses: ["BCom", "BBA", "CA Foundation"], cutoff: 82 },
+            { name: "Technical Institute", location: "Hubli", courses: ["Diploma CS", "Diploma Mechanical", "ITI Electrical"], cutoff: 70 }
+        ];
+
+        const careerPaths = {
+            "Arts": ["Civil Services", "Journalism", "Teaching", "Law", "Social Work", "Psychology"],
+            "Science": ["Engineering", "Medicine", "Research", "Data Science", "Pharmacy", "Biotechnology"],
+            "Commerce": ["CA/CS", "Banking", "Finance", "Marketing", "Business Analytics", "Entrepreneurship"]
+        };
+
+        const assessmentQuestions = [
+            {
+                question: "What type of activities do you enjoy most?",
+                options: ["Solving mathematical problems", "Writing and creative expression", "Analyzing business trends", "Hands-on technical work"],
+                weights: { Science: [3, 0, 1, 2], Arts: [0, 3, 1, 1], Commerce: [1, 1, 3, 2], Technical: [2, 0, 2, 3] }
+            },
+            {
+                question: "Which subjects interest you the most?",
+                options: ["Physics and Chemistry", "Literature and History", "Economics and Accounts", "Computer and Technology"],
+                weights: { Science: [3, 0, 1, 2], Arts: [0, 3, 1, 1], Commerce: [1, 1, 3, 1], Technical: [1, 0, 2, 3] }
+            },
+            {
+                question: "What's your preferred learning style?",
+                options: ["Experiments and practicals", "Reading and discussion", "Case studies and analysis", "Project-based learning"],
+                weights: { Science: [3, 1, 1, 2], Arts: [1, 3, 2, 1], Commerce: [1, 2, 3, 2], Technical: [2, 1, 2, 3] }
+            }
+        ];
+
+        // Assessment System
+        let currentQuestion = 0;
+        let scores = { Science: 0, Arts: 0, Commerce: 0, Technical: 0 };
+        let isAssessmentActive = false;
+
+        function createAssessmentModal() {
+            const modal = document.createElement('div');
+            modal.className = 'assessment-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Career Aptitude Assessment</h3>
+                        <span class="close-modal">&times;</span>
+                    </div>
+                    <div class="assessment-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Question 1 of ${assessmentQuestions.length}</span>
+                    </div>
+                    <div class="question-container">
+                        <h4 id="question-text"></h4>
+                        <div class="options-container" id="options-container"></div>
+                    </div>
+                    <div class="assessment-actions">
+                        <button class="btn-secondary" id="prev-btn" disabled>Previous</button>
+                        <button class="btn-primary" id="next-btn" disabled>Next</button>
+                    </div>
+                    <div class="results-container" id="results-container" style="display: none;">
+                        <h3>Your Career Recommendations</h3>
+                        <div id="results-content"></div>
+                        <div class="recommended-colleges">
+                            <h4>Recommended Colleges Near You</h4>
+                            <div id="college-recommendations"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add modal styles
+            const modalStyles = `
+                .assessment-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    backdrop-filter: blur(5px);
+                }
+                .modal-content {
+                    background: white;
+                    padding: 2rem;
+                    border-radius: 20px;
+                    max-width: 600px;
+                    width: 90%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    position: relative;
+                    animation: modalSlideIn 0.3s ease-out;
+                }
+                .modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1.5rem;
+                    padding-bottom: 1rem;
+                    border-bottom: 2px solid #f0f0f0;
+                }
+                .close-modal {
+                    font-size: 2rem;
+                    cursor: pointer;
+                    color: #999;
+                    transition: color 0.3s;
+                }
+                .close-modal:hover { color: #333; }
+                .assessment-progress {
+                    margin-bottom: 2rem;
+                }
+                .progress-bar {
+                    width: 100%;
+                    height: 8px;
+                    background: #e0e0e0;
+                    border-radius: 4px;
+                    overflow: hidden;
+                    margin-bottom: 0.5rem;
+                }
+                .progress-fill {
+                    height: 100%;
+                    background: linear-gradient(90deg, #667eea, #764ba2);
+                    width: 0%;
+                    transition: width 0.3s ease;
+                }
+                .progress-text {
+                    font-size: 0.9rem;
+                    color: #666;
+                }
+                .question-container {
+                    margin-bottom: 2rem;
+                }
+                #question-text {
+                    font-size: 1.3rem;
+                    margin-bottom: 1.5rem;
+                    color: #333;
+                }
+                .options-container {
+                    display: grid;
+                    gap: 1rem;
+                }
+                .option-button {
+                    padding: 1rem;
+                    border: 2px solid #e0e0e0;
+                    background: white;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    text-align: left;
+                    font-size: 1rem;
+                }
+                .option-button:hover {
+                    border-color: #667eea;
+                    background: #f8f9ff;
+                }
+                .option-button.selected {
+                    border-color: #667eea;
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    color: white;
+                }
+                .assessment-actions {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 1rem;
+                }
+                .results-container {
+                    text-align: center;
+                }
+                .career-result {
+                    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                    padding: 1.5rem;
+                    border-radius: 15px;
+                    margin: 1rem 0;
+                    border-left: 4px solid #667eea;
+                }
+                .career-paths {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.5rem;
+                    margin-top: 1rem;
+                }
+                .career-tag {
+                    background: #667eea;
+                    color: white;
+                    padding: 0.3rem 0.8rem;
+                    border-radius: 15px;
+                    font-size: 0.85rem;
+                }
+                .college-item {
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    padding: 1rem;
+                    margin: 0.5rem 0;
+                    text-align: left;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                }
+                .college-item h5 {
+                    color: #667eea;
+                    margin-bottom: 0.5rem;
+                }
+                .college-courses {
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin: 0.5rem 0;
+                }
+                .college-cutoff {
+                    font-weight: bold;
+                    color: #28a745;
+                }
+                @keyframes modalSlideIn {
+                    from { opacity: 0; transform: translateY(-50px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+
+            if (!document.getElementById('modal-styles')) {
+                const styleSheet = document.createElement('style');
+                styleSheet.id = 'modal-styles';
+                styleSheet.textContent = modalStyles;
+                document.head.appendChild(styleSheet);
+            }
+
+            document.body.appendChild(modal);
+            return modal;
+        }
+
+        function showQuestion(questionIndex) {
+            const question = assessmentQuestions[questionIndex];
+            document.getElementById('question-text').textContent = question.question;
+            document.querySelector('.progress-text').textContent = `Question ${questionIndex + 1} of ${assessmentQuestions.length}`;
+            document.querySelector('.progress-fill').style.width = `${((questionIndex) / assessmentQuestions.length) * 100}%`;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.textContent = option;
+                button.onclick = () => selectOption(index);
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('prev-btn').disabled = questionIndex === 0;
+            document.getElementById('next-btn').disabled = true;
+        }
+
+        function selectOption(optionIndex) {
+            document.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.option-button')[optionIndex].classList.add('selected');
+            
+            const question = assessmentQuestions[currentQuestion];
+            Object.keys(question.weights).forEach(stream => {
+                scores[stream] += question.weights[stream][optionIndex];
+            });
+
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function showResults() {
+            document.querySelector('.question-container').style.display = 'none';
+            document.querySelector('.assessment-actions').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.querySelector('.progress-text').style.display = 'none';
+            document.getElementById('results-container').style.display = 'block';
+
+            const sortedScores = Object.entries(scores).sort(([,a], [,b]) => b - a);
+            const topStream = sortedScores[0][0];
+
+            const resultsContent = document.getElementById('results-content');
+            resultsContent.innerHTML = `
+                <div class="career-result">
+                    <h4>Best Match: ${topStream} Stream</h4>
+                    <p>Based on your responses, ${topStream.toLowerCase()} subjects align well with your interests and strengths.</p>
+                    <div class="career-paths">
+                        ${careerPaths[topStream] ? careerPaths[topStream].map(career => 
+                            `<span class="career-tag">${career}</span>`
+                        ).join('') : ''}
+                    </div>
+                </div>
+            `;
+
+            // Show relevant colleges
+            const relevantColleges = collegeData.filter(college => 
+                college.courses.some(course => 
+                    course.toLowerCase().includes(topStream.toLowerCase()) ||
+                    (topStream === 'Arts' && course.includes('BA')) ||
+                    (topStream === 'Science' && course.includes('BSc')) ||
+                    (topStream === 'Commerce' && (course.includes('BCom') || course.includes('BBA'))) ||
+                    (topStream === 'Technical' && (course.includes('Diploma') || course.includes('ITI')))
+                )
+            );
+
+            const collegeRecommendations = document.getElementById('college-recommendations');
+            collegeRecommendations.innerHTML = relevantColleges.map(college => `
+                <div class="college-item">
+                    <h5>${college.name}</h5>
+                    <div class="college-courses">Courses: ${college.courses.join(', ')}</div>
+                    <div>Location: ${college.location}</div>
+                    <div class="college-cutoff">Required Score: ${college.cutoff}%</div>
+                </div>
+            `).join('');
+        }
+
+        // College Directory Search
+        function createCollegeDirectory() {
+            const modal = document.createElement('div');
+            modal.className = 'assessment-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Government College Directory</h3>
+                        <span class="close-modal">&times;</span>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" id="college-search" placeholder="Search by location, course, or college name..." />
+                        <div class="filter-tags">
+                            <button class="filter-tag active" data-filter="all">All</button>
+                            <button class="filter-tag" data-filter="Arts">Arts</button>
+                            <button class="filter-tag" data-filter="Science">Science</button>
+                            <button class="filter-tag" data-filter="Commerce">Commerce</button>
+                            <button class="filter-tag" data-filter="Technical">Technical</button>
+                        </div>
+                    </div>
+                    <div class="colleges-list" id="colleges-list">
+                        ${collegeData.map(college => `
+                            <div class="college-item" data-college='${JSON.stringify(college)}'>
+                                <h5>${college.name}</h5>
+                                <div class="college-courses">Courses: ${college.courses.join(', ')}</div>
+                                <div>Location: ${college.location}</div>
+                                <div class="college-cutoff">Required Score: ${college.cutoff}%</div>
+                                <button class="btn-primary" onclick="showCollegeDetails('${college.name}')">View Details</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Add search styles
+            const searchStyles = `
+                .search-container {
+                    margin-bottom: 2rem;
+                }
+                #college-search {
+                    width: 100%;
+                    padding: 1rem;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 10px;
+                    font-size: 1rem;
+                    margin-bottom: 1rem;
+                }
+                .filter-tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.5rem;
+                }
+                .filter-tag {
+                    padding: 0.5rem 1rem;
+                    border: 2px solid #e0e0e0;
+                    background: white;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+                .filter-tag.active {
+                    background: #667eea;
+                    color: white;
+                    border-color: #667eea;
+                }
+                .colleges-list {
+                    max-height: 400px;
+                    overflow-y: auto;
+                }
+            `;
+
+            if (!document.getElementById('search-styles')) {
+                const styleSheet = document.createElement('style');
+                styleSheet.id = 'search-styles';
+                styleSheet.textContent = searchStyles;
+                document.head.appendChild(styleSheet);
+            }
+
+            document.body.appendChild(modal);
+            
+            // Add search functionality
+            const searchInput = document.getElementById('college-search');
+            const filterTags = document.querySelectorAll('.filter-tag');
+            
+            searchInput.addEventListener('input', filterColleges);
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    filterColleges();
+                });
+            });
+
+            return modal;
+        }
+
+        function filterColleges() {
+            const searchTerm = document.getElementById('college-search').value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-tag.active').dataset.filter;
+            const collegeItems = document.querySelectorAll('#colleges-list .college-item');
+
+            collegeItems.forEach(item => {
+                const college = JSON.parse(item.dataset.college);
+                const matchesSearch = college.name.toLowerCase().includes(searchTerm) ||
+                                    college.location.toLowerCase().includes(searchTerm) ||
+                                    college.courses.some(course => course.toLowerCase().includes(searchTerm));
+                
+                const matchesFilter = activeFilter === 'all' || 
+                                    college.courses.some(course => course.toLowerCase().includes(activeFilter.toLowerCase()));
+
+                item.style.display = matchesSearch && matchesFilter ? 'block' : 'none';
+            });
+        }
+
+        function showCollegeDetails(collegeName) {
+            const college = collegeData.find(c => c.name === collegeName);
+            alert(`${college.name}\n\nLocation: ${college.location}\nCourses: ${college.courses.join(', ')}\nCutoff: ${college.cutoff}%\n\nContact for admissions: admissions@${college.name.toLowerCase().replace(/\s+/g, '')}.edu.in`);
+        }
+
+        // CTA button interactions with actual functionality
         document.querySelectorAll('.cta-button, .btn-primary, .btn-secondary').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -819,8 +1247,131 @@
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
+
+                // Handle different button actions
+                if (this.textContent.includes('Take Assessment') || this.textContent.includes('Get Started') || this.textContent.includes('Start Your Journey')) {
+                    startAssessment();
+                } else if (this.textContent.includes('Learn More')) {
+                    document.querySelector('#features').scrollIntoView({ behavior: 'smooth' });
+                } else if (this.classList.contains('cta-button') && this.closest('header')) {
+                    // Header CTA - show college directory
+                    showCollegeDirectory();
+                }
             });
         });
+
+        function startAssessment() {
+            if (isAssessmentActive) return;
+            
+            isAssessmentActive = true;
+            currentQuestion = 0;
+            scores = { Science: 0, Arts: 0, Commerce: 0, Technical: 0 };
+            
+            const modal = createAssessmentModal();
+            showQuestion(currentQuestion);
+
+            // Add event listeners
+            modal.querySelector('.close-modal').addEventListener('click', () => {
+                document.body.removeChild(modal);
+                isAssessmentActive = false;
+            });
+
+            modal.querySelector('#next-btn').addEventListener('click', () => {
+                currentQuestion++;
+                if (currentQuestion < assessmentQuestions.length) {
+                    showQuestion(currentQuestion);
+                } else {
+                    showResults();
+                }
+            });
+
+            modal.querySelector('#prev-btn').addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    showQuestion(currentQuestion);
+                }
+            });
+        }
+
+        function showCollegeDirectory() {
+            const modal = createCollegeDirectory();
+            
+            modal.querySelector('.close-modal').addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+        }
+
+        // Add notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span>${message}</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+            `;
+
+            const notificationStyles = `
+                .notification {
+                    position: fixed;
+                    top: 100px;
+                    right: 20px;
+                    background: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+                    z-index: 9999;
+                    animation: slideInRight 0.3s ease-out;
+                    max-width: 300px;
+                    border-left: 4px solid #667eea;
+                }
+                .notification-success { border-left-color: #28a745; }
+                .notification-warning { border-left-color: #ffc107; }
+                .notification-error { border-left-color: #dc3545; }
+                .notification-content {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .notification-close {
+                    background: none;
+                    border: none;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                    margin-left: 1rem;
+                    color: #999;
+                }
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+
+            if (!document.getElementById('notification-styles')) {
+                const styleSheet = document.createElement('style');
+                styleSheet.id = 'notification-styles';
+                styleSheet.textContent = notificationStyles;
+                document.head.appendChild(styleSheet);
+            }
+
+            document.body.appendChild(notification);
+
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                document.body.removeChild(notification);
+            });
+
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        // Demo notifications on page load
+        setTimeout(() => {
+            showNotification('Welcome to PathFinder! Take our assessment to get personalized career guidance.', 'success');
+        }, 2000);
 
         // Add ripple animation CSS
         const style = document.createElement('style');
