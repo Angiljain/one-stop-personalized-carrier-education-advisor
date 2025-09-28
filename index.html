@@ -2,249 +2,837 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>One-stop Career & Education Advisor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PathFinder - Digital Guidance Platform</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f5f7fa; }
-        .center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
-        .logo { font-size: 2.5rem; font-weight: bold; color: #2b6cb0; margin-bottom: 0.5em; }
-        .tagline { font-size: 1.2rem; color: #4a5568; margin-bottom: 2em; }
-        .loader { border: 6px solid #e2e8f0; border-top: 6px solid #2b6cb0; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 2em;}
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .btn { background: #2b6cb0; color: #fff; border: none; padding: 0.8em 2em; border-radius: 5px; font-size: 1rem; cursor: pointer; margin: 0.5em 0; }
-        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; margin: 1em auto; max-width: 400px; }
-        .input, select { width: 100%; padding: 0.7em; margin: 0.5em 0 1em 0; border: 1px solid #cbd5e1; border-radius: 4px; }
-        .nav { display: flex; justify-content: space-around; background: #2b6cb0; color: #fff; padding: 1em 0; position: fixed; width: 100%; bottom: 0; left: 0; }
-        .nav a { color: #fff; text-decoration: none; font-weight: 500; }
-        .progress-bar { background: #e2e8f0; border-radius: 5px; overflow: hidden; height: 18px; margin-bottom: 1em; }
-        .progress { background: #2b6cb0; height: 100%; }
-        .section-title { font-size: 1.3rem; color: #2b6cb0; margin-bottom: 0.7em; }
-        .small-link { color: #2b6cb0; font-size: 0.95em; cursor: pointer; text-decoration: underline; }
-        .hidden { display: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #667eea;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border: 2px solid white;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+        }
+        
+        /* Problem Section */
+        .problem-section {
+            background: #f8f9fa;
+            padding: 80px 0;
+        }
+        
+        .problem-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .problem-text h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .problem-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .problem-visual {
+            position: relative;
+        }
+        
+        .confusion-diagram {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .confusion-diagram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* Implementation Strategy */
+        .implementation {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 80px 0;
+            color: white;
+        }
+        
+        .implementation h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+        }
+        
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: white;
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 3rem;
+            align-items: center;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding: 0 2rem;
+        }
+        
+        .timeline-marker {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+        
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-content p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        /* Impact Section */
+        .impact {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .impact h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+        
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .impact-item {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .impact-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .impact-item h3 {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .impact-item p {
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        /* CTA Section */
+        .final-cta {
+            background: linear-gradient(135deg, #333, #555);
+            padding: 80px 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .final-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        footer {
+            background: #222;
+            color: white;
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .problem-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                flex-direction: row !important;
+            }
+            
+            .timeline-item:nth-child(even) {
+                flex-direction: row !important;
+            }
+            
+            .timeline-marker {
+                margin-left: 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Splash / Welcome Screen -->
-    <div id="splash" class="center">
-        <div class="logo">CareerPath</div>
-        <div class="tagline">Find Your Path, Build Your Future</div>
-        <div class="loader"></div>
-    </div>
-
-    <!-- Onboarding / Sign Up Page -->
-    <div id="onboarding" class="center hidden">
-        <div class="card">
-            <div class="section-title">Sign Up / Sign In</div>
-            <button class="btn" onclick="nextPage('profile')">Continue with Google</button>
-            <button class="btn" onclick="nextPage('profile')">Continue with LinkedIn</button>
-            <input class="input" type="email" placeholder="Email">
-            <button class="btn" onclick="nextPage('profile')">Continue with Email</button>
-            <hr>
-            <div class="section-title" style="font-size:1rem;">Quick Questionnaire</div>
-            <select class="input">
-                <option>Education Level</option>
-                <option>School</option>
-                <option>College</option>
-                <option>Graduate</option>
-            </select>
-            <select class="input">
-                <option>Field of Interest</option>
-                <option>Science</option>
-                <option>Arts</option>
-                <option>Commerce</option>
-                <option>Technology</option>
-            </select>
-            <div class="small-link" onclick="nextPage('profile')">Continue as Guest</div>
-        </div>
-    </div>
-
-    <!-- User Profile Setup Page -->
-    <div id="profile" class="center hidden">
-        <div class="card">
-            <div class="section-title">Profile Setup</div>
-            <input class="input" type="file" accept="image/*">
-            <input class="input" type="text" placeholder="Current Education">
-            <input class="input" type="text" placeholder="Marks/Grades">
-            <input class="input" type="text" placeholder="Skills (e.g., coding, design)">
-            <input class="input" type="text" placeholder="Interests (e.g., creative, analytical)">
-            <input class="input" type="text" placeholder="Career Aspirations">
-            <button class="btn" onclick="nextPage('dashboard')">Save & Continue</button>
-        </div>
-    </div>
-
-    <!-- Dashboard (Home Page) -->
-    <div id="dashboard" class="center hidden">
-        <div class="card">
-            <div class="section-title">Hi Nehal, here are today’s recommendations</div>
-            <div>
-                <div class="card" style="background:#ebf8ff;">Career Suggestion: <b>Web Developer</b></div>
-                <div class="card" style="background:#fefcbf;">Skill to Improve: <b>Communication</b></div>
-                <div class="card" style="background:#c6f6d5;">Course Recommendation: <b>HTML & CSS Basics</b></div>
-                <div class="card" style="background:#fbd38d;">Progress Score: <b>45%</b></div>
-            </div>
-        </div>
-        <div class="nav">
-            <a href="#" onclick="nextPage('career')">Careers</a>
-            <a href="#" onclick="nextPage('education')">Education</a>
-            <a href="#" onclick="nextPage('roadmap')">Roadmap</a>
-            <a href="#" onclick="nextPage('mentorship')">Mentorship</a>
-            <a href="#" onclick="nextPage('progress')">Progress</a>
-            <a href="#" onclick="nextPage('community')">Community</a>
-            <a href="#" onclick="nextPage('settings')">Settings</a>
-        </div>
-    </div>
-
-    <!-- Career Recommendation Page -->
-    <div id="career" class="center hidden">
-        <div class="card">
-            <div class="section-title">Top Career Recommendations</div>
-            <div>
-                <b>1. Web Developer</b>
-                <ul>
-                    <li>Job: Build websites & apps</li>
-                    <li>Growth: High demand</li>
-                    <li>Salary: $40k–$120k</li>
-                    <li>Work: Remote/Freelance</li>
-                    <li>Why: Matches your coding & creative skills</li>
-                </ul>
-                <b>2. Data Analyst</b>
-                <ul>
-                    <li>Job: Analyze data for insights</li>
-                    <li>Growth: Growing field</li>
-                    <li>Salary: $45k–$110k</li>
-                    <li>Work: On-site/Remote</li>
-                    <li>Why: Suits your analytical interests</li>
-                </ul>
-            </div>
-            <div>
-                <select class="input">
-                    <option>Filter: Trending Careers</option>
-                    <option>High-Paying Careers</option>
-                    <option>Careers for Arts Students</option>
-                </select>
-            </div>
-            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
-        </div>
-    </div>
-
-    <!-- Education & Skill Development Page -->
-    <div id="education" class="center hidden">
-        <div class="card">
-            <div class="section-title">Skill Development</div>
-            <div>
-                <b>Technical Skills</b>
-                <ul>
-                    <li>HTML & CSS (Coursera) <span class="small-link">Enroll</span></li>
-                    <li>Python Basics (Udemy) <span class="small-link">Enroll</span></li>
-                </ul>
-                <b>Soft Skills</b>
-                <ul>
-                    <li>Communication (LinkedIn Learning) <span class="small-link">Enroll</span></li>
-                    <li>Leadership (NPTEL) <span class="small-link">Enroll</span></li>
-                </ul>
-            </div>
-            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
-        </div>
-    </div>
-
-    <!-- Roadmap / Career Journey Page -->
-    <div id="roadmap" class="center hidden">
-        <div class="card">
-            <div class="section-title">Career Roadmap</div>
-            <ul>
-                <li>Learn HTML/CSS (1 month)</li>
-                <li>Build 3 projects (2 months)</li>
-                <li>Get internship (6 months)</li>
-                <li>Apply for jobs (1 year)</li>
+    <header>
+        <nav class="container">
+            <div class="logo">PathFinder</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#implementation">Implementation</a></li>
+                <li><a href="#impact">Impact</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
-            <div class="progress-bar">
-                <div class="progress" style="width: 45%;"></div>
+            <a href="#" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Your Path to Success Starts Here</h1>
+                <p>Personalized career guidance platform helping students make informed decisions about their education and future. Bridge the awareness gap and unlock your potential.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn-primary">Take Assessment</a>
+                    <a href="#features" class="btn-secondary">Learn More</a>
+                </div>
             </div>
-            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
         </div>
-    </div>
+    </section>
 
-    <!-- Mentorship & Guidance Page -->
-    <div id="mentorship" class="center hidden">
-        <div class="card">
-            <div class="section-title">Mentorship & Guidance</div>
-            <div>
-                <b>AI Mentor Chatbot:</b> <span class="small-link">Ask a question</span><br>
-                <b>Resume Builder:</b> <span class="small-link">Start</span><br>
-                <b>Interview Prep:</b> <span class="small-link">Practice</span>
+    <section class="problem-section">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-text">
+                    <h2>The Hidden Crisis in Education</h2>
+                    <p>While infrastructure improvements grab headlines, the real challenge lies deeper. Students across India face a critical information gap that's silently reshaping their futures.</p>
+                    <p>After Class 10 and 12, confusion reigns. Which stream to choose? What career paths exist? How do government colleges fit into their dreams? These unanswered questions lead to poor decisions, dropouts, and missed opportunities.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">60%</span>
+                            <div class="stat-label">Students lack career awareness</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">40%</span>
+                            <div class="stat-label">Make uninformed choices</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">25%</span>
+                            <div class="stat-label">Drop out due to confusion</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">70%</span>
+                            <div class="stat-label">Overlook government colleges</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="problem-visual">
+                    <div class="confusion-diagram">
+                        <h3>The Student Dilemma</h3>
+                        <p><strong>After Class 10/12:</strong></p>
+                        <ul style="text-align: left; margin: 1rem 0; color: #666;">
+                            <li>Which stream to choose?</li>
+                            <li>What degree programs exist nearby?</li>
+                            <li>What jobs will I get after graduation?</li>
+                            <li>Is graduation even worth it?</li>
+                            <li>How do I choose based on interests?</li>
+                        </ul>
+                        <p style="color: #e74c3c; font-weight: bold;">Result: Poor decisions, dropouts, missed opportunities</p>
+                    </div>
+                </div>
             </div>
-            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
         </div>
-    </div>
+    </section>
 
-    <!-- Resources & Community Page -->
-    <div id="community" class="center hidden">
-        <div class="card">
-            <div class="section-title">Resources & Community</div>
-            <ul>
-                <li>Career Blogs</li>
-                <li>Industry Updates</li>
-                <li>Success Stories</li>
-                <li>Peer Forums</li>
-                <li>Motivational Content</li>
-            </ul>
-            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
-        </div>
-    </div>
-
-    <!-- Progress & Tracking Page -->
-    <div id="progress" class="center hidden">
-        <div class="card">
-            <div class="section-title">Your Progress</div>
-            <div>Career Readiness Score: <b>45%</b></div>
-            <div class="progress-bar">
-                <div class="progress" style="width: 45%;"></div>
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Comprehensive Guidance Platform</h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto;">A one-stop digital solution providing personalized career and education advisory services for students at every crucial decision point.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Aptitude & Interest Assessment</h3>
+                    <p>Smart quizzes analyze personality traits, strengths, and interests to suggest optimal streams. Compare career paths for Arts, Science, Commerce, and Vocational courses with personalized recommendations.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Course-to-Career Mapping</h3>
+                    <p>Visual charts showing career outcomes for every degree. Explore industries, government exams, private opportunities, and entrepreneurial paths. See exactly where each course leads.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🏫</div>
+                    <h3>Government College Directory</h3>
+                    <p>Location-based listings of nearby government colleges with detailed information on programs, cut-offs, facilities, and admission requirements. Make informed institutional choices.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Timeline Tracker</h3>
+                    <p>Never miss important dates. Get notifications for admissions, scholarships, entrance exams, and counseling schedules. Stay ahead of all crucial deadlines.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI-Powered Personalization</h3>
+                    <p>Machine learning algorithms create personalized user profiles, tracking academic interests and providing customized course suggestions, college recommendations, and study materials.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Resource Library</h3>
+                    <p>Access curated study materials, e-books, scholarship information, and skill development resources. Everything you need for academic and career success in one place.</p>
+                </div>
             </div>
-            <div>Skills Learned: 3/10</div>
-            <div>Courses Completed: 2</div>
-            <div>Badges Earned: <span>Beginner, Communicator</span></div>
-            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
         </div>
-    </div>
+    </section>
 
-    <!-- Settings & Profile Management Page -->
-    <div id="settings" class="center hidden">
-        <div class="card">
-            <div class="section-title">Settings & Profile</div>
-            <div>
-                <div class="small-link">Edit Profile</div>
-                <div class="small-link">Notification Settings</div>
-                <div class="small-link">Privacy & Data</div>
-                <div class="small-link">Toggle Dark/Light Mode</div>
+    <section class="implementation" id="implementation">
+        <div class="container">
+            <h2>Implementation Roadmap</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Stakeholder Collaboration</h3>
+                        <p>Partner with government education departments, school teachers, NGOs, and counselors to develop accurate, relevant content and establish outreach networks.</p>
+                    </div>
+                    <div class="timeline-marker"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Technology Development</h3>
+                        <p>Build scalable, lightweight platform with offline capabilities for areas with poor connectivity. Develop both mobile and web versions with intuitive interfaces.</p>
+                    </div>
+                    <div class="timeline-marker"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Pilot Launch</h3>
+                        <p>Test in districts with low college enrollment. Gather comprehensive feedback from students, teachers, and parents to refine the platform.</p>
+                    </div>
+                    <div class="timeline-marker"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Full-Scale Rollout</h3>
+                        <p>Deploy state-wide and nationally through government schools, skill centers, and educational institutions. Establish support networks for widespread adoption.</p>
+                    </div>
+                    <div class="timeline-marker"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Monitoring & Analytics</h3>
+                        <p>Implement real-time tracking of usage patterns, suggestion accuracy, and successful college enrollments. Continuous improvement based on data insights.</p>
+                    </div>
+                    <div class="timeline-marker"></div>
+                </div>
             </div>
-            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
         </div>
-    </div>
+    </section>
 
-    <!-- Help & Support Page -->
-    <div id="help" class="center hidden">
-        <div class="card">
-            <div class="section-title">Help & Support</div>
-            <ul>
-                <li>FAQs</li>
-                <li>Contact Support: <span class="small-link">Chatbot</span>, <span class="small-link">Email</span>, <span class="small-link">Phone</span></li>
-                <li>Feedback Form</li>
-            </ul>
-            <button class="btn" onclick="nextPage('dashboard')">Back to Dashboard</button>
+    <section class="impact" id="impact">
+        <div class="container">
+            <h2>Expected Impact</h2>
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <h3>Increased Enrollment</h3>
+                    <p>Significant rise in government degree college enrollment as students make informed decisions based on accurate information and personalized guidance.</p>
+                </div>
+                
+                <div class="impact-item">
+                    <h3>Reduced Dropouts</h3>
+                    <p>Lower dropout rates after Class 10 and 12 through better career clarity and understanding of educational pathways and their outcomes.</p>
+                </div>
+                
+                <div class="impact-item">
+                    <h3>Empowered Decision-Making</h3>
+                    <p>Students gain access to reliable, localized career guidance, enabling them to make choices aligned with their interests and regional opportunities.</p>
+                </div>
+                
+                <div class="impact-item">
+                    <h3>Enhanced College Perception</h3>
+                    <p>Improved perception of government colleges as viable, high-quality institutions for career building and academic excellence.</p>
+                </div>
+                
+                <div class="impact-item">
+                    <h3>Rural-Urban Bridge</h3>
+                    <p>Equitable access to quality career guidance regardless of geographic location, bridging the information gap between rural and urban students.</p>
+                </div>
+                
+                <div class="impact-item">
+                    <h3>Economic Development</h3>
+                    <p>Better alignment of education with local industry needs, contributing to regional economic growth and reduced migration for education.</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to Transform Educational Guidance?</h2>
+            <p>Join us in bridging the awareness gap and empowering students to make informed decisions about their future. Together, we can build a more equitable and effective education ecosystem.</p>
+            <a href="#" class="cta-button" style="font-size: 1.2rem; padding: 1.2rem 3rem;">Start Your Journey</a>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>PathFinder</h3>
+                    <p>Empowering students with personalized career guidance and educational insights for a brighter future.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="#features">Features</a></p>
+                    <p><a href="#implementation">Implementation</a></p>
+                    <p><a href="#impact">Impact</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Email: info@pathfinder.edu.in</p>
+                    <p>Phone: +91-XXXX-XXXXXX</p>
+                    <p>Address: Education Technology Hub, India</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Partnership</h3>
+                    <p>Government Collaboration</p>
+                    <p>Educational Institutions</p>
+                    <p>Technology Partners</p>
+                </div>
+            </div>
+            <hr style="border: none; height: 1px; background: #444; margin: 2rem 0;">
+            <p>&copy; 2025 PathFinder Digital Guidance Platform. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
-        // Page navigation logic
-        function nextPage(page) {
-            const pages = ['splash','onboarding','profile','dashboard','career','education','roadmap','mentorship','community','progress','settings','help'];
-            pages.forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(page).classList.remove('hidden');
-        }
-        // Splash screen timeout
-        window.onload = function() {
-            setTimeout(() => nextPage('onboarding'), 1800);
-        }
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background change on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.feature-card, .impact-item, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // CTA button interactions
+        document.querySelectorAll('.cta-button, .btn-primary, .btn-secondary').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
